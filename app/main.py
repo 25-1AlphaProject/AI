@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from app.api.endpoints import meal
 from app.routers import example
 
 app = FastAPI(
@@ -9,6 +10,8 @@ app = FastAPI(
 
 # API 라우터 등록
 app.include_router(example.router, prefix="/api", tags=["example"])
+app.include_router(meal.router, prefix="/api", tags=["meal"])
+
 
 @app.get("/")
 def read_root():
