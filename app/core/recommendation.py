@@ -3,7 +3,7 @@ import random
 from datetime import datetime
 
 df = pd.read_excel(
-    "recipe_data (1).xls",
+    "data.xls",   
     engine="xlrd"
 )
 
@@ -25,9 +25,9 @@ def calc_per_meal_cal(user):
     
     w = user["weight"]
     factor = {
-        "none": (25 + 30) / 2,     
-        "moderate": (30 + 35) / 2, 
-        "high": (35 + 40) / 2      
+        "none": (25 + 30) / 2,
+        "moderate": (30 + 35) / 2,
+        "high": (35 + 40) / 2
     }[user["activity_level"]]
     
     daily = w * factor
@@ -40,14 +40,33 @@ def recommend_one_day(user):
     d = df.copy()
     d["ingredient"] = d["ingredient"].fillna("").astype(str)
     
-    for allergen in user["allergy"]:
-        d = d[~d["ingredient"].str.contains(allergen)]
-    
-    if "hypertension" in user["diseases"]:
-        d = d[d["sodium"] <= 500]
-    
-    d["score"] = 0
+    allergy_alternatives = {
+        "해산물": ["닭고기", "달걀", "소고기"],
+        "돼지고기": ["쇠고기", "흰살생선"],
+        "우유": ["두유", "멸치", "해조류"],
+        "계란": ["생선", "두부", "콩나물"],
+        "밀": ["쌀", "감자"],
+        "땅콩": ["들기름"],
+        "콩": ["김", "미역", "멸치"]
+    }
 
+    for allergen in user["allergy"]:
+        allergen_mask = d["ingredient"].str.contains(allergen)
+        
+        if allergen in allergy_alternatives:
+            alt_masks = [d["ingredient"].str.contains(alt) for alt in allergy_alternatives[allergen]]
+            alternative_mask = alt_masks[0]
+            for m in alt_masks[1:]:
+                alternative_mask |= m
+            
+            d.loc[allergen_mask & alternative_mask, "score"] = d.get("score", 0) + 2
+            d = d[~(allergen_mask & ~alternative_mask)]
+        
+        else:
+            d = d[~allergen_mask]
+    
+    d["score"] = d.get("score", 0)  
+    
     for like in user["likes"]:
         d.loc[d["ingredient"].str.contains(like), "score"] += 1
     for dislike in user["dislikes"]:
@@ -67,8 +86,45 @@ def recommend_one_day(user):
         abs(d["protein_ratio"] - ideal_ratio["protein"]) +
         abs(d["fat_ratio"] - ideal_ratio["fat"])
     )
+    d["score"] += d["nutrition_score"] * 3
 
-    d["score"] += d["nutrition_score"] * 3   
+    for disease in user["diseases"]:
+        if disease == "hypertension":
+            d.loc[d["ingredient"].str.contains("간장|된장|고추장|젓갈|김치"), "score"] -= 2
+
+        if disease == "diabetes":
+            d.loc[d["ingredient"].str.contains("설탕|꿀|올리고당"), "score"] -= 2
+            d.loc[d["ingredient"].str.contains("잡곡|해조류|채소"), "score"] += 2
+
+        if disease == "stroke":
+            d.loc[d["ingredient"].str.contains("삼겹살|갈비|유제품"), "score"] -= 2
+            d.loc[d["ingredient"].str.contains("참기름|들기름|올리브유|견과류|등푸른생선"), "score"] += 2
+
+        if disease == "reflux":
+            d.loc[d["ingredient"].str.contains("커피|콜라|차|우유|유제품|튀김"), "score"] -= 2
+
+        if disease == "osteoporosis":
+            d.loc[d["ingredient"].str.contains("우유|유제품|생선|미역|다시마|해조류"), "score"] += 2
+
+        if disease == "cancer":
+            d.loc[d["food_type"].str.contains("죽"), "score"] += 2
+            d.loc[d["ingredient"].str.contains("채소|과일|육류|생선|계란|두부|콩|우유"), "score"] += 1
+
+        if disease == "hyperlipidemia":
+            d.loc[d["food_type"].str.contains("튀김|전"), "score"] -= 2
+            d.loc[d["food_type"].str.contains("조림|구이|찜"), "score"] += 2
+
+        if disease == "respiratory":
+            d.loc[d["ingredient"].str.contains("도라지|미역"), "score"] += 2
+
+        if disease == "liver":
+            d.loc[d["ingredient"].str.contains("조개|콩나물"), "score"] += 2
+
+        if disease == "stomach":
+            d.loc[d["ingredient"].str.contains("양배추|무"), "score"] += 2
+
+        if disease == "dementia":
+            d.loc[d["ingredient"].str.contains("견과류|올리브오일"), "score"] += 2
 
     d = d.sort_values(by=["score"], ascending=False)
 
