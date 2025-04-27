@@ -36,7 +36,6 @@ def calc_per_meal_cal(user):
     return daily / 3
 
 def recommend_one_day(user):
-    """사용자 정보를 받아서 하루 식단 추천"""
     per_meal = calc_per_meal_cal(user)
     d = df.copy()
     d["ingredient"] = d["ingredient"].fillna("").astype(str)
@@ -48,13 +47,30 @@ def recommend_one_day(user):
         d = d[d["sodium"] <= 500]
     
     d["score"] = 0
+
     for like in user["likes"]:
         d.loc[d["ingredient"].str.contains(like), "score"] += 1
     for dislike in user["dislikes"]:
         d.loc[d["ingredient"].str.contains(dislike), "score"] -= 1
-    
+
     d["calorie_diff"] = (d["calories"] - per_meal).abs()
-    d = d.sort_values(by=["score", "calorie_diff"], ascending=[False, True])
+    d["score"] -= d["calorie_diff"] / 50  
+
+    ideal_ratio = {"carbs": 0.55, "protein": 0.2, "fat": 0.25}
+
+    d["carbs_ratio"] = (d["carbohydrates"] * 4) / (d["calories"] + 1e-6)
+    d["protein_ratio"] = (d["protein"] * 4) / (d["calories"] + 1e-6)
+    d["fat_ratio"] = (d["fat"] * 9) / (d["calories"] + 1e-6)
+
+    d["nutrition_score"] = -(
+        abs(d["carbs_ratio"] - ideal_ratio["carbs"]) +
+        abs(d["protein_ratio"] - ideal_ratio["protein"]) +
+        abs(d["fat_ratio"] - ideal_ratio["fat"])
+    )
+
+    d["score"] += d["nutrition_score"] * 3   
+
+    d = d.sort_values(by=["score"], ascending=False)
 
     breakfast = d.sample(n=1)
     lunch = d.sample(n=1)
