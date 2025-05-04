@@ -1,4 +1,3 @@
-# app/api/v1/routers.py
 from fastapi import APIRouter
 from AI.app.api.endpoints import meal
 from app.api.endpoints import item

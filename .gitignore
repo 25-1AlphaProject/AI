@@ -30,3 +30,4 @@ pyvenv.cfg
 venv/
 bin/
 include/
+app/core/config.py
