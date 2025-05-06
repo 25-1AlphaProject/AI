@@ -36,7 +36,7 @@ def recommend_one_day(user, recipes):
     data = []
     for r in recipes:
         data.append({
-            "recipe_id": r.id,
+            "recipe_id": r.recipe_id,
             "name":      r.name,
             "calories":  r.calories or 0,
             "carbohydrates": r.carbohydrates or 0,
