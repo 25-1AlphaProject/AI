@@ -7,6 +7,8 @@ class UserDietInfo(BaseModel):
     likes:         Optional[List[str]] = []
     dislikes:      Optional[List[str]] = []
     diseases:      Optional[List[str]] = []
+    health_goal: Literal["다이어트","균형","증량","기타"]  
+
 
 class UserDetailsSchema(BaseModel):
     user_id:         int
@@ -17,7 +19,6 @@ class UserDetailsSchema(BaseModel):
     meal_count:      Literal["아침","점심","저녁"]
     target_calories: int
     user_diet_info:  UserDietInfo
-    created_at:      datetime
 
     class Config:
         orm_mode = True
