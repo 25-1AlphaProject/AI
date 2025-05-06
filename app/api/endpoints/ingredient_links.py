@@ -46,7 +46,6 @@ def ingredient_links(
 
     raw = recipe.ingredient or ""
     names = _parse_ingredients(raw)
-
     base = "https://www.coupang.com/np/search?component=&q={q}&channel=user"
     result = []
     for name in names:
