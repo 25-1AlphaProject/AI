@@ -1,10 +1,10 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import PlainTextResponse
-import traceback
-
 from app.routers.example                       import router as example_router
 from app.api.endpoints.meal                    import router as meal_router
 from app.api.endpoints.ingredient_links        import router as ing_router  # 추가
+from app.core.inference import load_model
+import traceback
 
 app = FastAPI(
     title="척척밥사 AI Server",
@@ -24,6 +24,10 @@ def read_root():
 async def debug_exception_handler(request: Request, exc: Exception):
     traceback.print_exc()
     return PlainTextResponse(f"{type(exc).__name__}: {exc}", status_code=500)
+
+@app.on_event("startup")
+def on_startup():
+    load_model()
 
 if __name__ == '__main__':
     import uvicorn
