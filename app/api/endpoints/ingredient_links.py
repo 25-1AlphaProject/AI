@@ -34,7 +34,6 @@ def _parse_ingredients(raw: str) -> List[str]:
 @router.get(
     "/ingredient-links/{recipe_id}",
     response_model=List[Dict[str,str]],
-    summary="레시피의 재료별로 쿠팡 검색 링크를 생성해 반환"
 )
 def ingredient_links(
     recipe_id: int,
