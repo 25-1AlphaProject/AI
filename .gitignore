@@ -34,3 +34,4 @@ backend-key.pem
 .env
 app/core/config.py
 weights/
+tests/
