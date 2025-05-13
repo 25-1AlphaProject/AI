@@ -3,11 +3,11 @@ from typing import Literal, List, Optional
 from datetime import datetime
 
 class UserDietInfo(BaseModel):
-    allergy:       Optional[List[str]] = []
-    likes:         Optional[List[str]] = []
-    dislikes:      Optional[List[str]] = []
+    allergies:       Optional[List[str]] = []
+    preferredMenus:         Optional[List[str]] = []
+    avoidIngredients:      Optional[List[str]] = []
     diseases:      Optional[List[str]] = []
-    health_goal: Literal["다이어트","균형","증량","기타"]  
+    health_goal: Literal["DIET","DISEASE_MANAGEMENT","HABIT_IMPROVEMENT","NOT_SURE"]  
 
 
 class UserDetailsSchema(BaseModel):
@@ -16,7 +16,7 @@ class UserDetailsSchema(BaseModel):
     age:             int
     height:          Optional[float]
     weight:          float
-    meal_count:      Literal["아침","점심","저녁"]
+    meal_count:      Literal["BREAKFAST","LUNCH","DINNER"]
     target_calories: int
     user_diet_info:  UserDietInfo
 
