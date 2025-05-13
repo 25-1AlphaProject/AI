@@ -15,10 +15,10 @@ def recommend_one_day(user, recipes):
       "meal_count": ...,
       "target_calories": ...,
       "user_diet_info": {
-        "allergy": [...],
+        "allergies": [...],
         "diseases": [...],
-        "likes": [...],
-        "dislikes": [...],
+        "preferredMenus": [...],
+        "avoidIngredients": [...],
         "health_goal": ...
       }
     }
@@ -29,8 +29,8 @@ def recommend_one_day(user, recipes):
     per_meal = calc_per_meal_cal(user)
     diet_info = user.get("user_diet_info", {})
     allergies = diet_info.get("allergy", [])
-    likes     = diet_info.get("likes", [])
-    dislikes  = diet_info.get("dislikes", [])
+    preferredMenus     = diet_info.get("preferredMenus", [])
+    avoidIngredients  = diet_info.get("avoidIngredients", [])
     diseases  = diet_info.get("diseases", [])
 
     data = []
@@ -69,10 +69,10 @@ def recommend_one_day(user, recipes):
             filtered.append(r)
 
     for r in filtered:
-        for like in likes:
+        for like in preferredMenus:
             if like in r["ingredient"]:
                 r["score"] += 1
-        for dislike in dislikes:
+        for dislike in avoidIngredients:
             if dislike in r["ingredient"]:
                 r["score"] -= 1
 
