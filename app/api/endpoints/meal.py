@@ -1,12 +1,12 @@
+# app/api/endpoints/meal.py
+
 from fastapi import APIRouter, Depends, HTTPException, Body
 from sqlalchemy.orm import Session
 from datetime import date, timedelta
-from typing import List
 
 from app.db.session           import get_db
 from app.models.recipe        import Recipe
 from app.models.weekly_meal   import WeeklyMeal
-from app.schemas.weekly_meal  import WeeklyMealRead
 from app.schemas.user         import UserDetailsSchema
 from app.core.recommendation  import recommend_one_day
 
@@ -14,8 +14,8 @@ router = APIRouter()
 
 @router.post(
     "/weekly",
-    response_model=List[WeeklyMealRead],
-    summary="사용자 정보를 받아 일주일치 식단을 추천·생성합니다."
+    response_model=dict,  
+    summary="사용자 정보를 받아 일주일치 식단을 추천·생성."
 )
 def create_weekly_plan(
     user: UserDetailsSchema = Body(..., description="사용자 상세 정보"),
@@ -25,27 +25,22 @@ def create_weekly_plan(
     if not recipes:
         raise HTTPException(404, "레시피가 없습니다.")
 
-    results: List[WeeklyMeal] = []
     today = date.today()
-
     for offset in range(7):
         meal_date = today + timedelta(days=offset)
         recs = recommend_one_day(user.dict(), recipes)
 
-        for meal_type in ("breakfast", "lunch", "dinner"):
+        for meal_type in ("BREAKFAST", "LUNCH", "DINNER"):
             r = recs[meal_type]
             wm = WeeklyMeal(
-                recipe_id = r["recipe_id"],
-                user_id      = user.user_id,
-                meal_type = meal_type,
-                meal_date = meal_date,
-                created_at = date.today()  
+                recipe_id  = r["recipe_id"],
+                user_id    = user.user_id,
+                meal_type  = meal_type,
+                meal_date  = meal_date,
+                created_at = date.today()
             )
             db.add(wm)
-            results.append(wm)
 
     db.commit()
-    for wm in results:
-        db.refresh(wm)
 
-    return results
+    return {"success": True}
