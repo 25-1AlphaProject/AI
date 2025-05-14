@@ -11,7 +11,8 @@ class UserDetails(Base):
     age               = Column(Integer, nullable=False)
     height            = Column(Float, nullable=True)
     weight            = Column(Float, nullable=False)
-    meal_count        = Column(Enum("BREAKFAST","LUNCH","DINNER", name="meal_count"), nullable=False)
+    meal_count      = Column(JSON, nullable=False)
     target_calories   = Column(Integer, nullable=False)
     user_diet_info    = Column(JSON, nullable=True)  # 알러지, 질환, 기피식, 건강목표 JSON
     created_at        = Column(DateTime(timezone=True), server_default=func.now())
+    health_goal       = Column(Enum("DIET","DISEASE_MANAGEMENT","HABIT_IMPROVEMENT","NOT_SURE", name="health_goal"), nullable=False)  # 건강 목표
