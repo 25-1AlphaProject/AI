@@ -131,21 +131,21 @@ def recommend_one_day(user, recipes):
     dinner    = random.choice(top10)
 
     return {
-        "breakfast": {
+        "BREAKFAST": {
             "recipe_id": breakfast["recipe_id"],
             "name":       breakfast["name"],
             "calories":   breakfast["calories"],
             "ingredients": breakfast["ingredient"],
             "score":      breakfast["score"]
         },
-        "lunch": {
+        "LUNCH": {
             "recipe_id": lunch["recipe_id"],
             "name":       lunch["name"],
             "calories":   lunch["calories"],
             "ingredients": lunch["ingredient"],
             "score":      lunch["score"]
         },
-        "dinner": {
+        "DINNER": {
             "recipe_id": dinner["recipe_id"],
             "name":       dinner["name"],
             "calories":   dinner["calories"],

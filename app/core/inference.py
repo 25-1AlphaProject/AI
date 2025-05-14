@@ -29,6 +29,6 @@ def predict(image_bytes: bytes) -> list[str]:
     from PIL import Image
 
     img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-    results = _MODEL(img, size=416)   # detect.py와 동일하게 416 해상도
+    results = _MODEL(img, size=416)   
 
     return [ _MODEL.names[int(c)] for c in results.xyxyn[0][:, -1] ]
