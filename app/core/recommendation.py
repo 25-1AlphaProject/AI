@@ -14,12 +14,12 @@ def recommend_one_day(user, recipes):
       "weight": ...,
       "meal_count": ...,
       "target_calories": ...,
+      "health_goal": ...,
       "user_diet_info": {
         "allergies": [...],
         "diseases": [...],
         "preferredMenus": [...],
         "avoidIngredients": [...],
-        "health_goal": ...
       }
     }
     """
