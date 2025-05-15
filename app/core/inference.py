@@ -20,7 +20,7 @@ def load_model():
         path=str(weights),
         source='local'
     )
-    #print("모델 로드 완료, 클래스 목록:", _MODEL.names)   # ← 여기에 추가
+    print("모델 로드 완료, 클래스 목록:", _MODEL.names)   # ← 여기에 추가
 
     _MODEL.conf = 0.1
 
