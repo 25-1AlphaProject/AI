@@ -10,7 +10,7 @@ from app.core.inference                 import load_model
 
 app = FastAPI(
     title="척척밥사 AI Server",
-    description="AI 서버 및 REST API 통신을 위한 FastAPI 기반 서버",
+    description="AI 서버 및 백엔드 API 통신을 위한 FastAPI 서버",
     version="0.1.0"
 )
 
