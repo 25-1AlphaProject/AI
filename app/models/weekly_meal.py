@@ -1,5 +1,3 @@
-# app/models/weekly_meal.py
-
 from sqlalchemy import Column, BigInteger, DateTime, Enum as SQLEnum, Date, ForeignKey
 from sqlalchemy.sql import func
 from app.db.base import Base

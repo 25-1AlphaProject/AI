@@ -56,6 +56,26 @@ EN_TO_KO = {
     "Sundae":                        "순대",
     "Sushi":                         "초밥",
     "Sashimi":                       "회",
+    "Soy sauce crab":               "간장게장",
+    "Spicy marinated crab":         "양념게장",
+    "Grilled short ribs":           "LA갈비",
+    "Cold soybean soup noodles":    "콩국수",
+    "Spicy cold noodles":           "비빔냉면",
+    "Stir-fried octopus":           "낙지볶음",
+    "Spicy stir-fried chicken":     "닭갈비",
+    "Chicken and ginseng soup":     "삼계탕",
+    "Braised spicy chicken":        "닭볶음탕",
+    "Grilled eel":                  "장어구이",
+    "Grilled beef intestines":      "곱창구이",
+    "Spicy fish stew":              "매운탕",
+    "Boiled pork slices":           "보쌈",
+    "Fermented skate":              "홍어",
+    "Steamed eggs":                 "계란찜",
+    "Pan-fried tofu":               "두부부침",
+    "Spicy stir-fried pork":        "매운 제육볶음",
+    "Mung bean pancake":            "녹두전",
+    "Korean sweet pancakes":        "호떡",
+    "Korean blood sausage soup":    "순댓국"
 }
 
 
