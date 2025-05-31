@@ -7,3 +7,6 @@ class RecognizeRequest(BaseModel):
 class RecognizeResponse(BaseModel):
     mealName:     str
     foodCalories: float
+    protein: float
+    fat: float
+    carbohydrate: float

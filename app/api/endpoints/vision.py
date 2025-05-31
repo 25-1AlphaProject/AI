@@ -48,5 +48,9 @@ def recognize_food(
 
     return {
         "mealName":     ko,           
-        "foodCalories": pick.calories 
+        "foodCalories": pick.calories,
+        "protein" : pick.protein,
+        "fat": pick.fat,
+        "carbohydrate": pick.carbohydrates,
+
     }
